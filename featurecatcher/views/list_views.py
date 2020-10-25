@@ -38,6 +38,9 @@ def detail(video_id):
     """ return value is
         [
             {
+                'video_path' : s
+            },
+            {
                 'person_id': n,
                 'person_info_list' : [
                     {
@@ -67,9 +70,9 @@ def detail(video_id):
     VideoTable = getVideoTable(tableName)
     
     returnJson = list()
+    returnJson.append({'video_path' : video.video_name })
 
     people = db.session.query(VideoTable.person_id.distinct()).all()
-
     for person in people:
         personDict = dict()
         person_id = person[0]

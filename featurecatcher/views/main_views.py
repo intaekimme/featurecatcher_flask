@@ -38,7 +38,7 @@ def videoWriterFactory(now, codec, fps=30, width=640, height=480):
     """param(now) should be datetime.datetime class"""
     assert type(now) == datetime.datetime
     filename = "{path}/out_{time}.mp4".format(
-        path=savePath, time=now.strftime("%Y-%m-%d_%H:%M:%S")
+        path=savePath, time=now.strftime("%Y%m%d_%H%M%S")
     )
     return filename, cv2.VideoWriter(filename, codec, fps, (width, height))
 

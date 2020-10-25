@@ -1,0 +1,28 @@
+<!-- Side Bar (Video List, Serching) -->
+<div class="col-md-4 sidebar">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+        <li role="presentation"><a href="#list" data-toggle="tab">List</a></li>
+        <li role="presentation"><a href="#search" data-toggle="tab">Search</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Videos List Panel -->
+        <div role="tabpanel" class="tab-pane active" id="list">
+            <ul id="video_list" class="list-group"></ul>
+        </div>
+        <!-- Searching Person Panel -->
+        <div role="tabpanel" class="tab-pane" id="search">
+            <!-- Input -->
+            <div id="serching-input" class="input-group">
+                <input type="text" class="form-control" placeholder="age">
+                <input type="text" class="form-control" placeholder="gender">
+                <input type="text" class="form-control" placeholder="top color">
+                <input type="text" class="form-control" placeholder="bottom color">
+            </div>
+            <!-- Serch Button -->
+            <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary btn-lg"
+                autocomplete="off">Search</button>
+        </div>
+    </div>
+</div>

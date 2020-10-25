@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Video and Panel -->
+<div class="col-md-8">
+    <div id="camera_screen">
+        <img src="{{ url_for('main.video_feed') }}" width="100%">
+    </div>
+    <div id="video_screen" class="embed-responsive embed-responsive-4by3" style="display: none;">
+        <video id="video_player" class="video-js embed-responsive-item" controls preload="auto" width="640"
+            height="480" data-setup="{}">
+            <source id="video_source" src="{{ url_for('static', filename='dummy_video.mp4') }}" type="video/mp4" />
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video>
+    </div>
+    <!-- Analyzed Video Info -->
+    <div class="panel panel-default" style="height:100;">
+        <div class="panel-heading">ID 0 | AGE 38 | male | 1769472 | 10461108</div>
+        <div class="panel-body">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+            <img src="{{ url_for('static', filename='person_0_42.bmp') }}" alt="...">
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Panel heading without title</div>
+        <div class="panel-body">
+            Panel content
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function refresh() {
+        fetch("{{ url_for('list.items') }}").then(function (response) {
+            return response.json();
+        }).then(function (jsonResponse) {
+            // console.log(JSON.stringify(jsonResponse));
+            for (let index = 0; index < jsonResponse.length; index++) {
+                const element = jsonResponse[index];
+
+                videoId = element.video_id;
+                videoName = element.video_time;
+                personCount = element.person_count;
+
+                appendable = true;
+                $('.video_name').each(function () {
+                    if ($(this).text() === videoName)
+                        appendable = false;
+                });
+                if (!appendable) continue;
+
+                $('#video_list').append(
+                    "<li class='list-group-item'> \
+                        <div class='row d-flex flex-row'> \
+                            <a id='video_link" + videoId + "' href='#' data-uri='/list/items/" + videoId + "'> \
+                                <div class='col-md-6'> \
+                                    <h4 class='video_name'>"+ videoName + "</h4> \
+                                </div> \
+                                <div class='col-md-3'> \
+                                    <img src=\"{{ url_for('static', filename='person_icon.png') }}\" alt=''...' width='50' height='50'> \
+                                    <h4 class='person_count'>" + personCount + "</h4> \
+                                </div> \
+                            </a> \
+                        </div> \
+                    </li>"
+                );
+                $('#video_link' + videoId).on('click', function () {
+                    fetch($(this).data('uri')).then(function (response) {
+                        return response.json();
+                    }).then(function (jsonResponse) {
+                        console.log(JSON.stringify(jsonResponse));
+                        // 비디오 경로(비디오 가져오기 & 실시간 --> 비디오로 교체)
+                        // analyzed info 정보 가져오기 & 배치
+                        for (let i = 0; i < jsonResponse.length; i++) {
+                            const element = jsonResponse[i];
+
+                            personId = element.person_id;
+                            personInfoList = element.person_info_list;
+
+                            for (let j = 0; j < personInfoList.length; j++) {
+                                const personInfo = personInfoList[j];
+                                
+                                frame = personInfo.frame; // 버림
+
+                                millisec = personInfo.millisec; // 사진 누르면 video 해당 millisec으로 이동하도록
+                                imgPath = personInfo.img_person; // 각 사진 가져올 path
+
+                                age = personInfo.age; // exception : 0, 나머지 모두 더하여 평균 내기
+                                gender = personInfo.gender; // exception : undefined, female vs male 중 count하여 더 많이 나온 쪽으로 결정
+                                
+                                topColor = personInfo.top_color; // exception : 0, 나머지 모두 더하여 평균 내고, 표시
+                                bottomColor = personInfo.bottom_color; // exception : 0, 나머지 모두 더하여 평균 내고, 표시
+                            }
+                        }
+
+                        videoPlayer = videojs('video_player');
+                        videoSource = $('#video_source');
+                        if (!videoPlayer.paused)
+                            videoPlayer.pause();
+                        
+                        videoSource.attr('src', "{{ url_for('static', filename='out.mp4') }}");
+
+                        videoPlayer.src({
+                            type: 'video/mp4',
+                            src: "{{ url_for('static', filename='out.mp4') }}"
+                        });
+                        
+                        videoPlayer.load();
+
+                        $("#camera_screen").hide()
+                        $("#video_screen").show()
+                    });
+                });
+            }
+        });
+        setTimeout(refresh, 5000);
+    }
+    setTimeout(refresh, 5000);
+</script>
+{% endblock %}

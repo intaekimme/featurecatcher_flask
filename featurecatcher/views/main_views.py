@@ -1,7 +1,7 @@
 from flask import Blueprint, url_for, current_app, Response, render_template, stream_with_context
 from werkzeug.utils import redirect
 import cv2
-import datetime
+import datetime, time
 
 from .. import db, savePath
 from ..models import VideoList
@@ -14,10 +14,6 @@ secondsForNewVideo = 20
 @bp.route("/")
 def index():
     """Video streaming home page."""
-    # now = datetime.datetime.now()
-    # timeString = now.strftime("%Y-%m-%d %H:%M:%S")
-    # templateData = {"title": "Image Streaming", "time": timeString}
-    # return render_template("index.html", **templateData)
     return render_template("content.html")
 
 
@@ -60,14 +56,16 @@ def gen_frames():
         t2 = datetime.datetime.now()
         if compareSeconds(t1, t2, secondsForNewVideo):
             out.release()
-            out_name, out = videoWriterFactory(t2, codec)
-            t1 = t2
 
             # add video description to video list table
+            # out_name : abs path of video file
             video_list = VideoList(video_name=out_name, is_processed=0)
             print("add video_list table : {file_name}".format(file_name=out_name))
             db.session.add(video_list)
             db.session.commit()
+            
+            out_name, out = videoWriterFactory(t2, codec)
+            t1 = t2
 
         ret, image = cap.read()
         out.write(image)
@@ -79,6 +77,7 @@ def gen_frames():
 
     cap.release()
     out.release()
+    print("error!")
 
 
 @bp.route("/video_feed")

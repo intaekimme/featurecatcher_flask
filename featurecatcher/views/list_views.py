@@ -10,7 +10,7 @@ bp = Blueprint("list", __name__, url_prefix="/list")
 secondsForNewVideo = 20
 
 
-def parseVideoName(videoPath):
+def videoNameToTable(videoPath):
     return videoPath.split('/')[-1].split('.')[0]
 
 
@@ -22,8 +22,8 @@ def items():
     returnJson = list()
     for video in processed_videos:
         videoId = video[0]
-        videoPath = video[1]
-        tableName = parseVideoName(videoPath)
+        videoPath = video[1] # VideoList.video_name
+        tableName = videoNameToTable(videoPath)
         VideoTable = getVideoTable(tableName)
         
         video_time = tableName[4:]
@@ -66,11 +66,11 @@ def detail(video_id):
 
     """
     video = VideoList.query.get_or_404(video_id)
-    tableName = parseVideoName(video.video_name)
+    tableName = videoNameToTable(video.video_name)
     VideoTable = getVideoTable(tableName)
     
     returnJson = list()
-    returnJson.append({'video_path' : video.video_name })
+    returnJson.append({'video_name' : tableName + '.mp4' })
 
     people = db.session.query(VideoTable.person_id.distinct()).all()
     for person in people:

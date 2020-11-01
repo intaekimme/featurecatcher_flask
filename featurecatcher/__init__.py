@@ -6,22 +6,10 @@ import os
 db = SQLAlchemy()
 
 # path that recorded video will be saved
-savePath = str()
-
-def user_setting():
-    global savePath
-    print("Specify the path to save the recorded video : ", end='')
-    savePath = input()
-    if savePath[-1] == '/':
-        savePath = savePath[:-1]
-    print("Recorded video will be saved in {path}".format(path=savePath))
-
+savePath = os.path.dirname(__file__) + '/static/temp/videos'
 
 def create_app():
     app = Flask(__name__)
-    if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        user_setting()
-    
     app.config.from_envvar('APP_CONFIG_FILE')
 
     # ORM

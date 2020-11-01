@@ -1,2 +1,9 @@
+# python cache files
 __pycache__
 *.pyc
+
+# temp images
+/featurecatcher/static/temp/videos/*
+/featurecatcher/static/temp/images/*
+!/featurecatcher/static/temp/videos/.gitkeep
+!/featurecatcher/static/temp/images/.gitkeep

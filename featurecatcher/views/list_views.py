@@ -82,13 +82,17 @@ def detail(video_id):
         personInfoList = VideoTable.query.filter(VideoTable.person_id == person_id).all()
         
         for personInfo in personInfoList:
+            # change 'personInfo.img_person' from abs path to relative path
+            index = personInfo.img_person.find('images')
+            img_person = personInfo.img_person[index + 7:]
+
             personDict['person_info_list'].append(
                 {
                     'frame' : personInfo.frame,
                     'millisec' : personInfo.millisec,
                     'age' : personInfo.age,
                     'gender' : personInfo.gender,
-                    'img_person' : personInfo.img_person,
+                    'img_person' : img_person,
                     'top_color' : personInfo.top_color,
                     'bottom_color' : personInfo.bottom_color
                 }

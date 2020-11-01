@@ -11,7 +11,7 @@ def getVideoTable(tableName):
         "millisec": db.Column(db.Integer, nullable=False),
         "age": db.Column(db.Integer, nullable=False),
         "gender": db.Column(db.String(10), nullable=False),
-        "img_person": db.Column(db.String(100), nullable=False),
+        "img_person": db.Column(db.String(200), nullable=False),
         "top_color": db.Column(db.Integer, nullable=False),
         "bottom_color": db.Column(db.Integer, nullable=False),
     }
@@ -24,7 +24,7 @@ def getVideoListTable(tableName="video_list"):
     tabledict = {
         "__table_args__": {"extend_existing": True},
         "id": db.Column(db.Integer, primary_key=True),
-        "video_name": db.Column(db.String(100), nullable=False),
+        "video_name": db.Column(db.String(200), nullable=False),
         "is_processed": db.Column(db.Integer, nullable=False),
     }
 
@@ -35,7 +35,7 @@ def getVideoListTable(tableName="video_list"):
 class VideoList(db.Model):
     __table_args__ = {"extend_existing": True}
     id = db.Column(db.Integer, primary_key=True)
-    video_name = db.Column(db.String(100), nullable=False)
+    video_name = db.Column(db.String(200), nullable=False)
     is_processed = db.Column(db.Integer, nullable=False)
 
 

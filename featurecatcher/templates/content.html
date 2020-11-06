@@ -6,7 +6,7 @@
     <div id="camera_screen">
         <img src="{{ url_for('main.video_feed') }}" width="100%">
     </div>
-    <div id="video_screen" class="embed-responsive embed-responsive-4by3" style="display: none;">
+    <div id="video_screen" class="embed-responsive embed-responsive-16by9" style="display: none;">
         <video id="video_player" class="video-js embed-responsive-item" controls preload="auto" width="640" height="480"
             data-setup="{}">
             <source id="video_source" src="{{ url_for('static', filename='dummy_video.mp4') }}" type="video/mp4" />
@@ -24,6 +24,13 @@
 
 {% block script %}
 <script>
+    $(document).ready(
+        $('#camBtn').on('click', function() {
+            $('#camera_screen').css('display', '');
+            $('#video_screen').css('display', 'none');
+        })
+    );
+
     function refresh() {
         fetch("{{ url_for('list.items') }}").then(function (response) {
             return response.json();
@@ -152,8 +159,8 @@
 
                         videoPlayer.load();
 
-                        $("#camera_screen").hide()
-                        $("#video_screen").show()
+                        $("#camera_screen").css("display", "none");
+                        $("#video_screen").css("display", "")
                     });
                 });
             }
@@ -161,12 +168,6 @@
         setTimeout(refresh, 5000);
     }
     setTimeout(refresh, 5000);
-
-    $(document).ready(function() {
-        $('#camBtn').on('click', function() {
-            $("#camera_screen").show()
-            $("#video_screen").hide()
-        });
-    });
+    
 </script>
 {% endblock %}

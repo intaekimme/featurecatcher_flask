@@ -40,7 +40,7 @@ def videoWriterFactory(now, codec, fps=30, width=640, height=480):
 
 
 def gen_frames():
-    cap = cv2.VideoCapture(-1)
+    cap = cv2.VideoCapture(0)
 
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)

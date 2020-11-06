@@ -51,7 +51,7 @@
                                     <h4 class='video_name'>"+ videoName + "</h4> \
                                 </div> \
                                 <div class='col-md-3'> \
-                                    <img src=\"{{ url_for('static', filename='person_icon.png') }}\" alt=''...' width='50' height='50'> \
+                                    <img src=\"{{ url_for('static', filename='person_icon.png') }}\" alt=''...' width='25' height='25'> \
                                     <h4 class='person_count'>" + personCount + "</h4> \
                                 </div> \
                             </a> \
@@ -77,7 +77,7 @@
                             $('#video_info').append(
                                 "<div id='person_info" + personId + "' class='panel panel-default' > \
                                     <div class='panel-heading'></div> \
-                                    <div class='panel-body' style='height:150; overflow=scroll;'> \
+                                    <div class='panel-body' style='height:150px; overflow:scroll;'> \
                                     </div> \
                                 </div>"
                             )
@@ -94,7 +94,7 @@
                                 millisec = personInfo.millisec; // 사진 누르면 video 해당 millisec으로 이동하도록
                                 imgPath = personInfo.img_person; // 각 사진 가져올 path
                                 $('#person_info' + personId + ' .panel-body').append(
-                                    "<img src=\"{{ url_for('static', filename='temp/images/IMGPATH') }}\">".replace('IMGPATH', imgPath)
+                                    "<img src=\"{{ url_for('static', filename='temp/images/IMGPATH') }}\" style='height:150px; width:150px;'>".replace('IMGPATH', imgPath)
                                 )
 
                                 age = personInfo.age; // exception : 0, 나머지 모두 더하여 평균 내기
@@ -130,10 +130,10 @@
                             gender = (maleCount > femaleCount) ? 'male' : 'female';
                             if (isNaN(maleCount === femaleCount)) gender = "???";
 
-                            info = 'ID ' + personId + ' | ' +
-                                'AGE ' + age + ' | ' +
-                                'GENDER ' + gender + ' | ' +
-                                'TOP ' + topColor + ' | ' +
+                            info = 'ID ' + personId + '   |   ' +
+                                'AGE ' + age + '   |   ' +
+                                'GENDER ' + gender + '   |   ' +
+                                'TOP ' + topColor + '   |   ' +
                                 'BOTTOM ' + bottomColor;
                             $('#person_info' + personId + ' .panel-heading').html(info)
                         }

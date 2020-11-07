@@ -52,13 +52,15 @@
 
                 $('#video_list').append(
                     "<li class='list-group-item'> \
-                        <div class='row d-flex flex-row'> \
+                        <div class='row'> \
                             <a id='video_link" + videoId + "' href='#' data-uri='/list/items/" + videoId + "'> \
-                                <div class='col-md-6'> \
+                                <div class='col-md-8'> \
                                     <h4 class='video_name'>"+ videoName + "</h4> \
                                 </div> \
-                                <div class='col-md-3'> \
+                                <div class='col-md-2'> \
                                     <img src=\"{{ url_for('static', filename='person_icon.png') }}\" alt=''...' width='25' height='25'> \
+                                </div> \
+                                <div class='col-md-2'> \
                                     <h4 class='person_count'>" + personCount + "</h4> \
                                 </div> \
                             </a> \
@@ -74,6 +76,7 @@
                         // 비디오 경로(비디오 가져오기 & 실시간 --> 비디오로 교체)
                         // analyzed info 정보 가져오기 & 배치
 
+                        videoPlayer = videojs('video_player');
                         videoName = jsonResponse[0].video_name;
                         for (let i = 1; i < jsonResponse.length; i++) {
                             const element = jsonResponse[i];
@@ -82,7 +85,7 @@
                             personInfoList = element.person_info_list;
 
                             $('#video_info').append(
-                                "<div id='person_info" + personId + "' class='panel panel-default' > \
+                                "<div id='person_info_" + personId + "' class='panel panel-default' > \
                                     <div class='panel-heading'></div> \
                                     <div class='panel-body' style='height:150px; overflow:scroll;'> \
                                     </div> \
@@ -100,9 +103,16 @@
 
                                 millisec = personInfo.millisec; // 사진 누르면 video 해당 millisec으로 이동하도록
                                 imgPath = personInfo.img_person; // 각 사진 가져올 path
-                                $('#person_info' + personId + ' .panel-body').append(
-                                    "<img src=\"{{ url_for('static', filename='temp/images/IMGPATH') }}\" style='height:150px; width:150px;'>".replace('IMGPATH', imgPath)
-                                )
+                                $('#person_info_' + personId + ' .panel-body').append(
+                                    "<img id='person_img_" + personId + "_" + millisec + "' \
+                                    src=\"{{ url_for('static', filename='temp/images/IMGPATH') }}\" \
+                                    style='height:150px; width:150px;'>".replace('IMGPATH', imgPath)
+                                );
+                                $('#person_img_' + personId + '_' + millisec).on('click', function() {
+                                    let temp = $(this).attr('id').split('_');
+                                    let targetSec = temp[temp.length - 1] / 1000;
+                                    videoPlayer.currentTime(targetSec);
+                                });
 
                                 age = personInfo.age; // exception : 0, 나머지 모두 더하여 평균 내기
                                 if (age !== 0) {
@@ -142,10 +152,9 @@
                                 'GENDER ' + gender + '   |   ' +
                                 'TOP ' + topColor + '   |   ' +
                                 'BOTTOM ' + bottomColor;
-                            $('#person_info' + personId + ' .panel-heading').html(info)
+                            $('#person_info_' + personId + ' .panel-heading').html(info)
                         }
 
-                        videoPlayer = videojs('video_player');
                         videoSource = $('#video_source');
                         if (!videoPlayer.paused)
                             videoPlayer.pause();

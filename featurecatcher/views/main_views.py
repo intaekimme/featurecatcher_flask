@@ -30,7 +30,7 @@ def compareSeconds(t1, t2, secondsLimit):
     return retval
 
 
-def videoWriterFactory(now, codec, fps=30, width=640, height=480):
+def videoWriterFactory(now, codec, fps, width, height):
     """param(now) should be datetime.datetime class"""
     assert type(now) == datetime.datetime
     filename = "{path}/out_{time}.mp4".format(
@@ -50,7 +50,7 @@ def gen_frames():
     codec = cv2.VideoWriter_fourcc(*"x264")
 
     t1 = datetime.datetime.now()
-    out_name, out = videoWriterFactory(t1, codec)
+    out_name, out = videoWriterFactory(t1, codec, fps, int(width), int(height))
 
     while cap.isOpened():
         t2 = datetime.datetime.now()
@@ -64,7 +64,7 @@ def gen_frames():
             db.session.add(video_list)
             db.session.commit()
             
-            out_name, out = videoWriterFactory(t2, codec)
+            out_name, out = videoWriterFactory(t2, codec, fps, int(width), int(height))
             t1 = t2
 
         ret, image = cap.read()
